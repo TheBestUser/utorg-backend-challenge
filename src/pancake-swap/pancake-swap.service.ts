@@ -12,26 +12,30 @@ import { BSC_RPC_NODE_URL, PANCAKE_SWAP_ROUTER_ADDRESS } from './constants';
 export class PancakeSwapService {
   constructor(private readonly configService: ConfigService) {}
 
-  async getAmountIn({ amount, from, to }: GetAmount): Promise<string> {
+  async getAmountsIn({ amount, from, to }: GetAmount) {
     const pancakeSwapRouter = this.getPancakeSwapRouter();
-
-    const res = await pancakeSwapRouter.getAmountIn(
-      PancakeSwapService.prepareAmount(amount),
-      from,
-      to,
+    const [fromAmount, toAmount] = await pancakeSwapRouter.getAmountsIn(
+      prepareAmount(amount),
+      [from, to],
     );
-    return utils.formatUnits(res, 6);
+
+    return {
+      fromAmount: wrapAmount(fromAmount),
+      toAmount: wrapAmount(toAmount),
+    };
   }
 
-  async getAmountOut({ amount, from, to }: GetAmount) {
+  async getAmountsOut({ amount, from, to }: GetAmount) {
     const pancakeSwapRouter = this.getPancakeSwapRouter();
-
-    const res = await pancakeSwapRouter.getAmountOut(
-      PancakeSwapService.prepareAmount(amount),
-      from,
-      to,
+    const [fromAmount, toAmount] = await pancakeSwapRouter.getAmountsOut(
+      prepareAmount(amount),
+      [from, to],
     );
-    return utils.formatUnits(res, 6);
+
+    return {
+      fromAmount: wrapAmount(fromAmount),
+      toAmount: wrapAmount(toAmount),
+    };
   }
 
   private getPancakeSwapRouter(): PancakeswapAbi {
@@ -43,8 +47,12 @@ export class PancakeSwapService {
 
     return PancakeswapAbi__factory.connect(pancakeSwapRouterAddress, provider);
   }
+}
 
-  private static prepareAmount(amount: string): BigNumberish {
-    return utils.parseUnits(amount, 6);
-  }
+function prepareAmount(amount: string): BigNumberish {
+  return utils.parseUnits(amount, 6);
+}
+
+function wrapAmount(amount: BigNumberish): string {
+  return utils.formatUnits(amount, 6);
 }

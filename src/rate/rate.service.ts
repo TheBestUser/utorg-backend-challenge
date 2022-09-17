@@ -6,23 +6,21 @@ import { PancakeSwapService } from '../pancake-swap/pancake-swap.service';
 export class RateService {
   constructor(private readonly pancakeSwapService: PancakeSwapService) {}
 
-  async postRate(postRateBodyDto: PostRateBodyDto): Promise<unknown> {
+  postRate(postRateBodyDto: PostRateBodyDto): Promise<unknown> {
     if (postRateBodyDto.fromAmount != null) {
-      const res = await this.pancakeSwapService.getAmountOut({
+      return this.pancakeSwapService.getAmountsOut({
         amount: postRateBodyDto.fromAmount,
         from: postRateBodyDto.from,
         to: postRateBodyDto.to,
       });
-      return res;
     }
 
     if (postRateBodyDto.toAmount != null) {
-      const res = await this.pancakeSwapService.getAmountIn({
+      return this.pancakeSwapService.getAmountsIn({
         amount: postRateBodyDto.toAmount,
         from: postRateBodyDto.from,
         to: postRateBodyDto.to,
       });
-      return res;
     }
 
     throw new Error('fromAmount or toAmount must be defined');
