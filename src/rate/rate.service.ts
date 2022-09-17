@@ -6,30 +6,23 @@ import { PancakeSwapService } from '../pancake-swap/pancake-swap.service';
 export class RateService {
   constructor(private readonly pancakeSwapService: PancakeSwapService) {}
 
-  // TODO: сделать нормальное преобразование
-  private static prepareAmount(amount: string): number {
-    return parseInt(amount);
-  }
-
   async postRate(postRateBodyDto: PostRateBodyDto): Promise<unknown> {
     if (postRateBodyDto.fromAmount != null) {
-      const amount = RateService.prepareAmount(postRateBodyDto.fromAmount);
       const res = await this.pancakeSwapService.getAmountOut({
-        amount,
+        amount: postRateBodyDto.fromAmount,
         from: postRateBodyDto.from,
         to: postRateBodyDto.to,
       });
-      return res.toNumber();
+      return res;
     }
 
     if (postRateBodyDto.toAmount != null) {
-      const amount = RateService.prepareAmount(postRateBodyDto.toAmount);
       const res = await this.pancakeSwapService.getAmountIn({
-        amount,
+        amount: postRateBodyDto.toAmount,
         from: postRateBodyDto.from,
         to: postRateBodyDto.to,
       });
-      return res.toNumber();
+      return res;
     }
 
     throw new Error('fromAmount or toAmount must be defined');
