@@ -7,7 +7,7 @@ describe('PancakeSwapService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
+      imports: [ConfigModule.forRoot()],
       providers: [PancakeSwapService],
     }).compile();
 

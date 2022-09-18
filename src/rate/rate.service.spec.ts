@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RateService } from './rate.service';
-import { PancakeSwapModule } from '../pancake-swap/pancake-swap.module';
+import { PancakeSwapModule } from '../pancake-swap';
 
 describe('RateService', () => {
   let service: RateService;

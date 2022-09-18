@@ -1,13 +1,17 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { RateService } from './rate.service';
-import { PostRateBodyDto } from './dto/postRateBody.dto';
+import { PostRateDto } from './dto';
+import { ValidationPipe, TradeRateDto } from '../shared';
 
 @Controller('rate')
 export class RateController {
-  constructor(private rateService: RateService) {}
+  constructor(private readonly rateService: RateService) {}
 
   @Post()
-  postRate(@Body() postRateBodyDto: PostRateBodyDto) {
+  postRate(
+    @Body(new ValidationPipe({ transform: true }))
+    postRateBodyDto: PostRateDto,
+  ): Promise<TradeRateDto> {
     return this.rateService.postRate(postRateBodyDto);
   }
 }

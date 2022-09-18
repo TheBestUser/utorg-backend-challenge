@@ -1,28 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { PostRateBodyDto } from './dto/postRateBody.dto';
-import { PancakeSwapService } from '../pancake-swap/pancake-swap.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PostRateDto } from './dto';
+import { PancakeSwapService } from '../pancake-swap';
+import { floorEthers, TradeRateDto } from '../shared';
+import { TransformPlainToInstance } from 'class-transformer';
 
 @Injectable()
 export class RateService {
   constructor(private readonly pancakeSwapService: PancakeSwapService) {}
 
-  postRate(postRateBodyDto: PostRateBodyDto): Promise<unknown> {
-    if (postRateBodyDto.fromAmount != null) {
+  @TransformPlainToInstance(TradeRateDto)
+  postRate(postRateDto: PostRateDto): Promise<TradeRateDto> {
+    if (postRateDto.fromAmount != null) {
       return this.pancakeSwapService.getAmountsOut({
-        amount: postRateBodyDto.fromAmount,
-        from: postRateBodyDto.from,
-        to: postRateBodyDto.to,
+        amount: floorEthers(postRateDto.fromAmount),
+        from: postRateDto.from,
+        to: postRateDto.to,
       });
     }
 
-    if (postRateBodyDto.toAmount != null) {
+    if (postRateDto.toAmount != null) {
       return this.pancakeSwapService.getAmountsIn({
-        amount: postRateBodyDto.toAmount,
-        from: postRateBodyDto.from,
-        to: postRateBodyDto.to,
+        amount: floorEthers(postRateDto.toAmount),
+        from: postRateDto.from,
+        to: postRateDto.to,
       });
     }
 
-    throw new Error('fromAmount or toAmount must be defined');
+    throw new BadRequestException('fromAmount or toAmount must be defined');
   }
 }

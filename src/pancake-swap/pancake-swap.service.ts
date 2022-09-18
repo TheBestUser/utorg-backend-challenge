@@ -1,58 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
-  PancakeswapAbi,
-  PancakeswapAbi__factory,
+  PancakeRouterAbi,
+  PancakeRouterAbi__factory,
 } from '../../types/ethers-contracts';
 import { ConfigService } from '@nestjs/config';
-import { BigNumberish, ethers, utils } from 'ethers';
-import { GetAmount } from './interfaces/getAmount.interface';
-import { BSC_RPC_NODE_URL, PANCAKE_SWAP_ROUTER_ADDRESS } from './constants';
+import { ethers, utils } from 'ethers';
+import { GetAmount } from './interfaces';
+import { PANCAKE_SWAP_ROUTER_ADDRESS } from './pancake-swap.constant';
+import { BigNumberish } from '@ethersproject/bignumber';
+import { TradeRate } from '../shared';
 
 @Injectable()
 export class PancakeSwapService {
-  constructor(private readonly configService: ConfigService) {}
+  private readonly pancakeRouterAbi: PancakeRouterAbi;
 
-  async getAmountsIn({ amount, from, to }: GetAmount) {
-    const pancakeSwapRouter = this.getPancakeSwapRouter();
-    const [fromAmount, toAmount] = await pancakeSwapRouter.getAmountsIn(
-      prepareAmount(amount),
-      [from, to],
-    );
-
-    return {
-      fromAmount: wrapAmount(fromAmount),
-      toAmount: wrapAmount(toAmount),
-    };
-  }
-
-  async getAmountsOut({ amount, from, to }: GetAmount) {
-    const pancakeSwapRouter = this.getPancakeSwapRouter();
-    const [fromAmount, toAmount] = await pancakeSwapRouter.getAmountsOut(
-      prepareAmount(amount),
-      [from, to],
-    );
-
-    return {
-      fromAmount: wrapAmount(fromAmount),
-      toAmount: wrapAmount(toAmount),
-    };
-  }
-
-  private getPancakeSwapRouter(): PancakeswapAbi {
-    const rpcHost = this.configService.getOrThrow<string>(BSC_RPC_NODE_URL);
-    const pancakeSwapRouterAddress = this.configService.getOrThrow<string>(
-      PANCAKE_SWAP_ROUTER_ADDRESS,
-    );
+  constructor(configService: ConfigService) {
+    const rpcHost = configService.getOrThrow<string>('BSC_RPC_NODE_URL');
     const provider = new ethers.providers.JsonRpcProvider(rpcHost);
 
-    return PancakeswapAbi__factory.connect(pancakeSwapRouterAddress, provider);
+    this.pancakeRouterAbi = PancakeRouterAbi__factory.connect(
+      PANCAKE_SWAP_ROUTER_ADDRESS,
+      provider,
+    );
   }
-}
 
-function prepareAmount(amount: string): BigNumberish {
-  return utils.parseUnits(amount, 6);
-}
+  async getAmountsIn({ amount, from, to }: GetAmount): Promise<TradeRate> {
+    const resultAmounts = await this.pancakeRouterAbi
+      .getAmountsIn(utils.parseEther(amount), [from, to])
+      .catch(() => []);
 
-function wrapAmount(amount: BigNumberish): string {
-  return utils.formatUnits(amount, 6);
+    return this.getEtherBounds(resultAmounts);
+  }
+
+  async getAmountsOut({ amount, from, to }: GetAmount): Promise<TradeRate> {
+    const resultAmounts = await this.pancakeRouterAbi
+      .getAmountsOut(utils.parseEther(amount), [from, to])
+      .catch(() => []);
+
+    return this.getEtherBounds(resultAmounts);
+  }
+
+  private getEtherBounds(amounts: BigNumberish[]): TradeRate {
+    if (amounts.length < 2) {
+      throw new InternalServerErrorException('Direct pair not found');
+    }
+
+    return {
+      fromAmount: utils.formatEther(amounts[0]),
+      toAmount: utils.formatEther(amounts[amounts.length - 1]),
+    };
+  }
 }
