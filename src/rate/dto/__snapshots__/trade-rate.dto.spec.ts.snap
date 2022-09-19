@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TradeRateDto should round down: 0.0: fromAmount 1`] = `
+TradeRateDto {
+  "fromAmount": "0.000000",
+}
+`;
+
+exports[`TradeRateDto should round down: 0.0: toAmount 1`] = `
+TradeRateDto {
+  "toAmount": "0.000000",
+}
+`;
+
+exports[`TradeRateDto should round down: 0: fromAmount 1`] = `
+TradeRateDto {
+  "fromAmount": "0.000000",
+}
+`;
+
+exports[`TradeRateDto should round down: 0: toAmount 1`] = `
+TradeRateDto {
+  "toAmount": "0.000000",
+}
+`;
+
+exports[`TradeRateDto should round down: 999.99999999: toAmount 1`] = `
+TradeRateDto {
+  "toAmount": "999.999999",
+}
+`;
+
+exports[`TradeRateDto should round down: 1000.000000: fromAmount 1`] = `
+TradeRateDto {
+  "fromAmount": "1000.000000",
+}
+`;
+
+exports[`TradeRateDto should round down: 1000.000000: toAmount 1`] = `
+TradeRateDto {
+  "toAmount": "1000.000000",
+}
+`;
+
+exports[`TradeRateDto should round down: 1000.1234560: fromAmount 1`] = `
+TradeRateDto {
+  "fromAmount": "1000.123456",
+}
+`;
+
+exports[`TradeRateDto should round down: 1000.1234567: toAmount 1`] = `
+TradeRateDto {
+  "toAmount": "1000.123456",
+}
+`;
+
+exports[`TradeRateDto should round up: 999.99999999: fromAmount 1`] = `
+TradeRateDto {
+  "fromAmount": "1000.000000",
+}
+`;
+
+exports[`TradeRateDto should round up: 1000.1234567: fromAmount 1`] = `
+TradeRateDto {
+  "fromAmount": "1000.123457",
+}
+`;
