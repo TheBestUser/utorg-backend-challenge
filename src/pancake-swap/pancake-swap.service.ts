@@ -4,10 +4,9 @@ import {
   PancakeRouterAbi__factory,
 } from '../../types/ethers-contracts';
 import { ConfigService } from '@nestjs/config';
-import { ethers, utils } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import { GetAmount } from './interfaces';
 import { PANCAKE_SWAP_ROUTER_ADDRESS } from './pancake-swap.constant';
-import { BigNumberish } from '@ethersproject/bignumber';
 import { TradeRate } from '../shared';
 
 @Injectable()
@@ -40,7 +39,7 @@ export class PancakeSwapService {
     return this.getEtherBounds(resultAmounts);
   }
 
-  private getEtherBounds(amounts: BigNumberish[]): TradeRate {
+  private getEtherBounds(amounts: BigNumber[]): TradeRate {
     if (amounts.length < 2) {
       throw new InternalServerErrorException('Direct pair not found');
     }
