@@ -3,8 +3,7 @@ import { parseFixed } from '@ethersproject/bignumber';
 export function ceilEthers(value: string, decimals = 18): string {
   const [integer, decimal] = parseFloatParts(value);
 
-  const toCeilDecimals = decimals + 1;
-  const toCeilDigit = decimal[toCeilDecimals] ?? '0';
+  const toCeilDigit = decimal[decimals] ?? '0';
 
   if (toCeilDigit === '0') {
     const decimalFixed = decimal.slice(0, decimals).padEnd(decimals, '0');
@@ -12,7 +11,7 @@ export function ceilEthers(value: string, decimals = 18): string {
   }
 
   const concatedAmount =
-    integer + decimal.slice(0, toCeilDecimals).padEnd(toCeilDecimals, '0');
+    integer + decimal.slice(0, decimals + 1).padEnd(decimals + 1, '0');
   const ceilString = parseFixed(concatedAmount, 0)
     .add(9)
     .toString()

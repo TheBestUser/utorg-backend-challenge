@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`round-ethers value: "", decimals: 6: ceilEthers 1`] = `"0.000000"`;
+
+exports[`round-ethers value: "", decimals: 6: floorEthers 1`] = `"0.000000"`;
+
+exports[`round-ethers value: "0", decimals: 6: ceilEthers 1`] = `"0.000000"`;
+
+exports[`round-ethers value: "0", decimals: 6: floorEthers 1`] = `"0.000000"`;
+
+exports[`round-ethers value: "0.0", decimals: 6: ceilEthers 1`] = `"0.000000"`;
+
+exports[`round-ethers value: "0.0", decimals: 6: floorEthers 1`] = `"0.000000"`;
+
+exports[`round-ethers value: "999.999999999", decimals: 0: ceilEthers 1`] = `"1000"`;
+
+exports[`round-ethers value: "999.999999999", decimals: 0: floorEthers 1`] = `"999"`;
+
+exports[`round-ethers value: "999.999999999", decimals: 6: ceilEthers 1`] = `"1000.000000"`;
+
+exports[`round-ethers value: "999.999999999", decimals: 6: floorEthers 1`] = `"999.999999"`;
+
+exports[`round-ethers value: "1000", decimals: 6: ceilEthers 1`] = `"1000.000000"`;
+
+exports[`round-ethers value: "1000", decimals: 6: floorEthers 1`] = `"1000.000000"`;
+
+exports[`round-ethers value: "1000.0", decimals: 6: ceilEthers 1`] = `"1000.000000"`;
+
+exports[`round-ethers value: "1000.0", decimals: 6: floorEthers 1`] = `"1000.000000"`;
+
+exports[`round-ethers value: "1000.1234560", decimals: 6: ceilEthers 1`] = `"1000.123456"`;
+
+exports[`round-ethers value: "1000.1234560", decimals: 6: floorEthers 1`] = `"1000.123456"`;
+
+exports[`round-ethers value: "1000.1234567", decimals: 6: ceilEthers 1`] = `"1000.123457"`;
+
+exports[`round-ethers value: "1000.1234567", decimals: 6: floorEthers 1`] = `"1000.123456"`;
+
+exports[`round-ethers value: "1000.999999999", decimals: 6: ceilEthers 1`] = `"1001.000000"`;
+
+exports[`round-ethers value: "1000.999999999", decimals: 6: floorEthers 1`] = `"1000.999999"`;

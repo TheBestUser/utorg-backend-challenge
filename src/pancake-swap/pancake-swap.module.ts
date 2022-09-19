@@ -3,7 +3,7 @@ import { PancakeSwapService } from './pancake-swap.service';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule.forRoot()],
   providers: [PancakeSwapService],
   exports: [PancakeSwapService],
 })
