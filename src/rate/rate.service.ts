@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PostRateDto } from './dto';
+import { PostRateDto, TradeRateDto } from './dto';
 import { PancakeSwapService } from '../pancake-swap';
-import { floorEthers, TradeRateDto } from '../shared';
+import { floorEthers } from '../shared';
 import { TransformPlainToInstance } from 'class-transformer';
 
 @Injectable()

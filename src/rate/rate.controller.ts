@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { RateService } from './rate.service';
-import { PostRateDto } from './dto';
-import { ValidationPipe, TradeRateDto } from '../shared';
+import { PostRateDto, TradeRateDto } from './dto';
+import { ValidationPipe } from '../shared';
 
 @Controller('rate')
 export class RateController {
