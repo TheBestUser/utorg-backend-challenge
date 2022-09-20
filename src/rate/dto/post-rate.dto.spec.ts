@@ -14,7 +14,7 @@ describe('PostRateDto', () => {
         plainToInstance(PostRateDto, {
           from: addressString,
           to: incorrectAddressString,
-          fromAmount: '1000.000000.00',
+          fromAmount: '1000.abcd0000',
         }),
       )
       .then((errors) => {
@@ -29,6 +29,20 @@ describe('PostRateDto', () => {
           from: addressString,
           to: addressString,
           fromAmount: '1000.123456789',
+        }),
+      )
+      .then((errors) => {
+        expect(errors.length).toEqual(0);
+      });
+  });
+
+  it('should return shorter string without error', () => {
+    return validator
+      .validate(
+        plainToInstance(PostRateDto, {
+          from: addressString,
+          to: addressString,
+          fromAmount: '1000.123456abcd',
         }),
       )
       .then((errors) => {

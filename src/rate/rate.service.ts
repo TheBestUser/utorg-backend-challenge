@@ -1,18 +1,16 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PostRateDto, TradeRateDto } from './dto';
+import { PostRateDto } from './dto';
 import { PancakeSwapService } from '../pancake-swap';
-import { floorEthers } from '../shared';
-import { TransformPlainToInstance } from 'class-transformer';
+import { TradeRate } from '../shared';
 
 @Injectable()
 export class RateService {
   constructor(private readonly pancakeSwapService: PancakeSwapService) {}
 
-  @TransformPlainToInstance(TradeRateDto)
-  postRate(postRateDto: PostRateDto): Promise<TradeRateDto> {
+  postRate(postRateDto: PostRateDto): Promise<TradeRate> {
     if (postRateDto.fromAmount != null) {
       return this.pancakeSwapService.getAmountsOut({
-        amount: floorEthers(postRateDto.fromAmount),
+        amount: postRateDto.fromAmount,
         from: postRateDto.from,
         to: postRateDto.to,
       });
@@ -20,7 +18,7 @@ export class RateService {
 
     if (postRateDto.toAmount != null) {
       return this.pancakeSwapService.getAmountsIn({
-        amount: floorEthers(postRateDto.toAmount),
+        amount: postRateDto.toAmount,
         from: postRateDto.from,
         to: postRateDto.to,
       });

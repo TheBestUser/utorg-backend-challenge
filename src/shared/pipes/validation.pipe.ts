@@ -19,8 +19,10 @@ export class ValidationPipe extends OriginValidationPipe {
   private readonly delimiter: string;
 
   constructor(@Optional() options?: ValidationPipeOptions) {
-    super(options);
-    this.delimiter = options?.delimiter ?? DEFAULT_DELIMITER;
+    const { delimiter, ...restOptions } = options ?? {};
+    super(options ? restOptions : undefined);
+
+    this.delimiter = delimiter ?? DEFAULT_DELIMITER;
   }
 
   public override createExceptionFactory() {
