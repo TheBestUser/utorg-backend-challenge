@@ -6,6 +6,7 @@ import {
   ValidationPipeOptions as OriginValidationPipeOptions,
 } from '@nestjs/common';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { capitalize } from '../utils';
 
 const DEFAULT_DELIMITER = '; ';
 
@@ -28,7 +29,7 @@ export class ValidationPipe extends OriginValidationPipe {
         return new HttpErrorByCode[this.errorHttpStatusCode]();
       }
       const errors: string[] = this.flattenValidationErrors(validationErrors);
-      const errorMessage = errors.join(this.delimiter);
+      const errorMessage = errors.map(capitalize).join(this.delimiter);
       return new HttpErrorByCode[this.errorHttpStatusCode](errorMessage);
     };
   }

@@ -1,4 +1,16 @@
-import { ceilEthers, floorEthers } from './round-ethers';
+import { capitalize, ceilEthers, floorEthers } from './string-helpers';
+
+describe('capitalize', () => {
+  test.each`
+    value     | expected
+    ${''}     | ${''}
+    ${'abcd'} | ${'Abcd'}
+    ${'Abcd'} | ${'Abcd'}
+    ${'.'}    | ${'.'}
+  `('capitalize: $value', ({ value, expected }) => {
+    expect(capitalize(value)).toBe(expected);
+  });
+});
 
 describe('round-ethers', () => {
   test.each`
