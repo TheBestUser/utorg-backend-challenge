@@ -10,7 +10,7 @@ RUN yarn
 
 COPY . .
 
-RUN yarn build && yarn test --ci
+RUN yarn build && yarn test --ci && yarn test:e2e
 
 FROM node:18-alpine as modules
 

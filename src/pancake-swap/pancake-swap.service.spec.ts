@@ -17,10 +17,11 @@ const PancakeSwapRouterProviderMock: Provider = {
 };
 
 describe('PancakeSwapService', () => {
+  let module: TestingModule;
   let pancakeSwapService: PancakeSwapService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [ConfigModule.forRoot()],
       providers: [PancakeSwapRouterProviderMock, PancakeSwapService],
     }).compile();
@@ -40,6 +41,10 @@ describe('PancakeSwapService', () => {
     const reqParam: GetAmount = {
       amount: '1.0',
     } as GetAmount;
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
     it('should return a value', async () => {
       const [amountIn, amountOut] = ['1.0', '2.0'].map((v) =>
@@ -82,6 +87,10 @@ describe('PancakeSwapService', () => {
       amount: '2.0',
     } as GetAmount;
 
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('should return a value', async () => {
       const [amountIn, amountOut] = ['1.0', '2.0'].map((v) =>
         utils.parseEther(v).toString(),
@@ -108,13 +117,15 @@ describe('PancakeSwapService', () => {
     });
 
     it(`should throw an error`, async () => {
-      getAmountsOut.mockResolvedValue(() => {
-        return [];
-      });
+      getAmountsOut.mockResolvedValue([]);
 
       await expect(
         pancakeSwapService.getAmountsOut(reqParam),
       ).rejects.toThrowErrorMatchingInlineSnapshot(`"Direct pair not found"`);
     });
+  });
+
+  afterAll(() => {
+    module?.close();
   });
 });
