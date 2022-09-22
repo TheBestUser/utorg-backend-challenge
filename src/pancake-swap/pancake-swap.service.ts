@@ -1,30 +1,23 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
-  PancakeRouterAbi,
-  PancakeRouterAbi__factory,
-} from '../../types/ethers-contracts';
-import { ConfigService } from '@nestjs/config';
-import { BigNumber, ethers, utils } from 'ethers';
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { PancakeRouterAbi } from '../../types/ethers-contracts';
+import { BigNumber, utils } from 'ethers';
 import { GetAmount } from './interfaces';
-import { PANCAKE_SWAP_ROUTER_ADDRESS } from './pancake-swap.constant';
 import { TradeRate } from '../shared';
+import { PANCAKE_SWAP_ROUTER_PROVIDER } from './pancake-swap.constant';
 
 @Injectable()
 export class PancakeSwapService {
-  private readonly pancakeRouterAbi: PancakeRouterAbi;
-
-  constructor(configService: ConfigService) {
-    const rpcHost = configService.getOrThrow<string>('BSC_RPC_NODE_URL');
-    const provider = new ethers.providers.JsonRpcProvider(rpcHost);
-
-    this.pancakeRouterAbi = PancakeRouterAbi__factory.connect(
-      PANCAKE_SWAP_ROUTER_ADDRESS,
-      provider,
-    );
-  }
+  constructor(
+    @Inject(PANCAKE_SWAP_ROUTER_PROVIDER)
+    private readonly pancakeRouter: PancakeRouterAbi,
+  ) {}
 
   async getAmountsIn({ amount, from, to }: GetAmount): Promise<TradeRate> {
-    const resultAmounts = await this.pancakeRouterAbi
+    const resultAmounts = await this.pancakeRouter
       .getAmountsIn(utils.parseEther(amount), [from, to])
       .catch(() => []);
 
@@ -32,7 +25,7 @@ export class PancakeSwapService {
   }
 
   async getAmountsOut({ amount, from, to }: GetAmount): Promise<TradeRate> {
-    const resultAmounts = await this.pancakeRouterAbi
+    const resultAmounts = await this.pancakeRouter
       .getAmountsOut(utils.parseEther(amount), [from, to])
       .catch(() => []);
 

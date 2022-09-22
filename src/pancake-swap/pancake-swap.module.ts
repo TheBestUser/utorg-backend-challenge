@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PancakeSwapService } from './pancake-swap.service';
-import { ConfigModule } from '@nestjs/config';
+import { PancakeSwapRouterProvider } from './providers';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
-  providers: [PancakeSwapService],
+  providers: [PancakeSwapRouterProvider, PancakeSwapService],
   exports: [PancakeSwapService],
 })
 export class PancakeSwapModule {}

@@ -10,7 +10,11 @@ import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { PancakeSwapModule } from './pancake-swap';
 
 @Module({
-  imports: [ConfigModule.forRoot(), RateModule, PancakeSwapModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    RateModule,
+    PancakeSwapModule,
+  ],
   providers: [
     { provide: APP_FILTER, useClass: HttpExceptionsFilter },
     {
