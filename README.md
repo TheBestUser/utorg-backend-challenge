@@ -1,5 +1,20 @@
 # UTORG test challenge
 
+## Usage
+
+Application provides a simple HTTP interface for fetching tokens rate available on URL `localhost:3000/rate`
+
+### Docker
+```shell
+docker-compose up -d
+```
+
+### Local
+
+```shell
+yarn && yarn start
+```
+
 ## Description
 Create NodeJS application using Nest.js framework to fetch crypto currency rates from Pancakeswap on BSC.
 
