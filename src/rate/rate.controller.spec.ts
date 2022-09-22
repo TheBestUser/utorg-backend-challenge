@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RateController } from './rate.controller';
 import { RateService } from './rate.service';
-import { PancakeSwapModule } from '../pancake-swap';
 import { PostRateDto, TradeRateDto } from './dto';
 
 describe('RateController', () => {
@@ -11,9 +10,15 @@ describe('RateController', () => {
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [PancakeSwapModule],
       controllers: [RateController],
-      providers: [RateService],
+      providers: [
+        {
+          provide: RateService,
+          useFactory: () => ({
+            postRate: jest.fn(),
+          }),
+        },
+      ],
     }).compile();
 
     rateController = module.get<RateController>(RateController);
